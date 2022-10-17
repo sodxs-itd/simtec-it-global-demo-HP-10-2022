@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_order_portal_content_customization" model="ir.ui.view">
+        <field name="name">sale_order_portal_content_customization</field>
+        <field name="inherit_id" ref="sale.sale_order_portal_content"/>
+        <field name="arch" type="xml">
+            <xpath expr="//table[@id='sales_order_table']/thead/tr/th[2]" position="after">
+                <th class="text-left">Estimated Arrival</th>
+            </xpath>
+            <xpath expr="//table[@id='sales_order_table']/tbody//tr/t/td[2]" position="after">
+                <td class="text-left">
+                    <t t-raw="line.estimated_arrival_str"/>
+                </td>
+            </xpath>
+        </field>
+    </record>
+</odoo>

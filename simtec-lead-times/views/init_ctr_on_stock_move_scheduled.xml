@@ -1,0 +1,24 @@
+<odoo>
+    <data noupdate="0">
+
+        <record id="init_ctr_lots_on_moves" model="ir.cron">
+            <field name="name">Init CTR lots on created moves</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="active">1</field>
+            <field name="interval_number">15</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="datetime.now() + timedelta(minutes=5)"/>
+            <field eval="True" name="doall"/>
+            <field name="state">code</field>
+            <field name="code">
+moves_to_init = env['stock.move'].search(['&amp;',('to_init','=',True),('state','!=','cancel')], limit=25)
+for move in moves_to_init:
+    move.init_ctr_lot()
+    move.write({'to_init': False})
+    env.cr.commit()
+            </field>
+        </record>
+
+    </data>
+</odoo>

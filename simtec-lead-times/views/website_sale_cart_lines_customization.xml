@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="website_sale_cart_lines_customization" model="ir.ui.view">
+        <field name="name">website_sale_cart_lines_customization</field>
+        <field name="inherit_id" ref="website_sale.cart_lines"/>
+        <field name="arch" type="xml">
+            <xpath expr="//th[hasclass('td-price')]" position="before">
+                <th class="text-center">Estimated Arrival</th>
+            </xpath>
+            <xpath expr="//td[@name='price']" position="before">
+                <td class="text-center">
+                    <span t-field="line.website_lot_info"/>
+                </td>
+            </xpath>
+        </field>
+    </record>
+</odoo>

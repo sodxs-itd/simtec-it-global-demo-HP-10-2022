@@ -1,0 +1,44 @@
+<odoo>
+    <record model='ir.ui.view' id='finish_preset_form_view'>
+        <field name="name">Finish Preset Form View</field>            
+        <field name="model">finish_preset</field>            
+        <field name='priority' eval='80'/>         
+        <field name="arch" type='xml'> 
+            <form string="Finish Preset">
+                <group>
+                    <group name="name_group">
+                        <field name="name"/>
+                        <field name="max_lead_time"/>
+                    </group>
+                    <group name="tmpl_group">
+                        <field name="product_tmpl_id"/>
+                        <field name="priority"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="finish_line_ids" string="Finish Lines">
+                        <tree editable="bottom">
+                            <field name="finish_preset_id" invisible="1"/>
+                            <field name="product_attribute_ids" invisible="1"/>
+                            <field name="product_attribute_value_ids" invisible="1"/>
+                            <field name="attribute_id" domain="[[&quot;id&quot;,&quot;in&quot;,product_attribute_ids]]"/>
+                            <field name="attribute_value_id" domain="[&quot;&amp;&quot;,[&quot;attribute_id&quot;,&quot;=&quot;,attribute_id],[&quot;id&quot;,&quot;in&quot;,product_attribute_value_ids]]"/>
+                        </tree>
+                    </field>
+                    <field name="exclusion_line_ids" string="Exclusion Lines">
+                        <tree editable="bottom">
+                            <field name="finish_preset_id" invisible="1"/>
+                            <field name="product_attribute_ids" invisible="1"/>
+                            <field name="product_attribute_value_ids" invisible="1"/>
+                            <field name="attribute_id" domain="[[&quot;id&quot;,&quot;in&quot;,product_attribute_ids]]"/>
+                            <field name="attribute_value_id" domain="[&quot;&amp;&quot;,[&quot;attribute_id&quot;,&quot;=&quot;,attribute_id],[&quot;id&quot;,&quot;in&quot;,product_attribute_value_ids]]"/>
+                        </tree>
+                    </field>
+                    <field name="po_line_ids" string="Purchase Order Lines" colspan="4" modifiers="{}"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>
+
+

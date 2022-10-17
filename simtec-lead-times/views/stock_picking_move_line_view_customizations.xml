@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_order_line_incoming_containers" model="ir.ui.view">
+        <field name="name">sale_order_line_incoming_containers</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='order_lines']/field[@name='order_line']/tree[1]/field[@name='product_uom_qty']" position="after">
+                <field name="website_lot_info"/>
+                <field name="incoming_container_str" widget="html"/>
+                <field name="estimated_arrival_str" widget="html"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="container_move_on_receipt_delivery" model="ir.ui.view">
+        <field name="name">container_move_on_receipt_delivery</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lot_name']" position="after">
+                <field name="ctr_lot_id_receipt" readonly="1" invisible="context.get('picking_type_code') != 'incoming'"/>
+            </xpath>
+            <xpath expr="//field[@name='product_uom_qty']" position="replace">
+                <field name="product_uom_qty"/>
+            </xpath>
+            <xpath expr="//field[@name='lot_id']" position="before">
+                <field name="product_id" invisible="1"/>
+                <field name="ctr_lot_id_delivery" domain="['&amp;','&amp;','&amp;',('product_id','=',product_id),('received','=',False),('cancelled','=',False),('receipt_line_id','!=',False)]" invisible="context.get('picking_type_code') == 'incoming'"/>
+                <field name="ctr_reserved_qty" invisible="context.get('picking_type_code') == 'incoming'"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="show_details_always_visible" model="ir.ui.view">
+        <field name="name">show_details_always_visible</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_show_details']" position="replace">
+                <field name="incoming_container_str" widget="html"/>
+                <field name="estimated_arrival_str" widget="html"/>
+                <button name="action_show_details" type="object" icon="fa-list" width="0.1" options="{&quot;warn&quot;: true}"/>
+            </xpath>
+            <xpath expr="//page[@name='detailed_operations']/field[@name='move_line_ids_without_package']" position="replace">
+                <field name="move_line_ids_without_package" attrs="{'readonly': ['|', '|', ('show_operations', '=', False), ('state', '=', 'cancel'), '&amp;', ('state', '=', 'done'), ('is_locked', '=', True)], 'invisible': [('show_reserved', '=', False)]}" context="{'tree_view_ref': 'stock.view_stock_move_line_detailed_operation_tree', 'default_picking_id': id, 'default_location_id': location_id, 'default_location_dest_id': location_dest_id, 'default_company_id': company_id, 'picking_type_code': picking_type_code}"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="container_move_on_receipt_delivery_detailed" model="ir.ui.view">
+        <field name="name">container_move_on_receipt_delivery_detailed</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="ctr_lot_id_delivery" domain="['&amp;','&amp;',('product_id','=',product_id),('received','=',False),('cancelled','=',False)]" invisible="context.get('picking_type_code') == 'incoming'"/>
+                <field name="ctr_reserved_qty" invisible="context.get('picking_type_code') == 'incoming'"/>            
+            </xpath>
+            <xpath expr="//field[@name='qty_done']" position="after">
+                <field name="incoming_container_str" widget="html"/>
+                <field name="estimated_arrival_str" widget="html"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

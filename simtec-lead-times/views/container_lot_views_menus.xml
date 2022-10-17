@@ -1,0 +1,134 @@
+<odoo>
+    <record id="ctr_lot_search_tree" model="ir.ui.view">
+        <field name="name">container_lot</field>
+        <field name="model">container_lot</field> 
+        <field name="type">search</field> 
+        <field name="arch" type='xml'>
+            <search string="Search CTR Lot">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="receipt_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record model='ir.ui.view' id='ctr_lot_form_view'>
+        <field name="name">CTR Lot</field>            
+        <field name="model">container_lot</field>            
+        <field name='priority' eval='80'/>         
+        <field name="arch" type='xml'> 
+            <form string="CTR Lot">
+                <div class="oe_button_box" name="button_box">
+                    <field name="received" invisible="1"/>
+                    <button style="color: green !important;" class="oe_stat_button" attrs="{'invisible': [('received','=',False)]}" name="toggle_active" type="object" icon="fa-thisisnotanicon">
+                        Received
+                    </button>
+                    <button class="oe_stat_button" attrs="{'invisible': [('received','=',True)]}" name="toggle_active" type="object" icon="fa-thisisnotanicon">
+                        Not Received
+                    </button>
+                    <field name="cancelled" invisible="1"/>
+                    <button style="color: red !important;" name="toggle_cancel" type="object" disabled="1" active="0" class="oe_stat_button" attrs="{'invisible': [('cancelled','!=',True)]}" icon="fa-thisisnotanicon">
+                        Cancelled
+                    </button>
+                </div>
+                <h2 style="color: red !important;" attrs="{'invisible': ['|',('warning_on_ctr','=',''),('warning_on_ctr','=',False)]}">
+                    <field name="warning_on_ctr"/>
+                </h2>
+                <group attrs="{'invisible': ['|',('unreserved_move_ids','=',False),('unreserved_move_ids','=',[])]}">
+                    <h2 style="color: red !important;">
+                        The following moves were unreserved from this CTR Lot, please re-assign them to other containers
+                    </h2>
+                    <field name="unreserved_move_ids" readonly="1">
+                        <tree>
+                            <field name="sales_order_id"/>
+                            <field name="picking_id"/>
+                            <field name="product_uom_qty"/>
+                            <field name="total_reserved_ctr"/>
+                            <field name="reserved_availability"/>
+                            <field name="state"/>
+                            <button name="action_show_details" type="object" icon="fa-list" width="0.1" options="{&quot;warn&quot;: true}"/>
+                        </tree>
+                    </field>
+                </group>
+                <group>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <h2>
+                        Scheduled Arrival Date: <field name="receipt_scheduled_date"/>
+                    </h2>
+                    <group>
+                        <field name="original_name"/>
+                        <field name="product_id"/>
+                        <field name="finish_preset_id"/>
+                    </group>
+                    <group>
+                        <field name="receipt_id"/>
+                        <field name="receipt_line_id"/>
+                        <field name="lot_id"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="initial_demand"/>
+                    <field name="ctr_reserved_qty"/>
+                    <field name="remaining_qty"/>
+                </group>
+                <group>
+                    <field name="delivery_move_line_ids" readonly="1">
+                        <tree>
+                            <field name="sales_order_id"/>
+                            <field name="picking_id"/>
+                            <field name="location_dest_id"/>
+                            <field name="ctr_reserved_qty"/>
+                            <field name="lot_id"/>
+                            <field name="product_uom_qty"/>
+                            <field name="state"/>
+                        </tree>
+                        <form>
+                            <field name="sales_order_id"/>
+                            <field name="picking_id"/>
+                            <field name="move_id"/>
+                            <field name="location_dest_id"/>
+                            <field name="ctr_reserved_qty"/>
+                            <field name="lot_id"/>
+                            <field name="product_uom_qty"/>
+                            <field name="state"/>
+                        </form>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record model='ir.ui.view' id='ctr_lot_tree_view'>
+        <field name="name">CTR Lot Tree</field>            
+        <field name="model">container_lot</field>            
+        <field name='priority' eval='80'/>         
+        <field name="arch" type='xml'> 
+            <tree string="CTR Lot">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="finish_preset_id"/>
+                <field name="receipt_scheduled_date"/>
+                <field name="initial_demand"/>
+                <field name="ctr_reserved_qty"/>
+                <field name="remaining_qty"/>
+                <field name="received"/>
+                <field name="cancelled"/>
+                <field name="unreserved_move_ids" invisible="1"/>
+                <button name="toggle_cancel" type="object" string="Unreserved Moves" attrs="{'invisible': ['|',('unreserved_move_ids','=',False),('unreserved_move_ids','=',[])]}" class="btn text-warning" icon="fa-exclamation-triangle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_ctr_lot_menu">
+        <field name="name">CTR Lot</field>
+        <field name="res_model">container_lot</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="ctr_lot_tree_view"/>
+        <field name="search_view_id" ref="ctr_lot_search_tree"/>
+    </record>
+
+    <menuitem id="menu_ctr_lot" parent="stock.menu_stock_root" name="CTR Lot" sequence="3" action="action_ctr_lot_menu" groups="stock.group_stock_user"/>
+    <menuitem id="menu_ctr_lot_purchase" parent="purchase.menu_purchase_root" name="CTR Lot" sequence="2" action="action_ctr_lot_menu" groups="purchase.group_purchase_user"/>
+
+</odoo>

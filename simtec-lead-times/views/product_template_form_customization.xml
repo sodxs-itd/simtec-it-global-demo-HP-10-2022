@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_finish_presets" model="ir.ui.view">
+        <field name="name">product_template_finish_presets</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']/group" position="after">
+                <group>
+                    <field name="out_of_incoming_message"/>
+                </group>
+                <group>
+                    <field name="id" invisible="1"/>
+                    <field name="finish_preset_ids">
+                        <tree>
+                            <field name="name" colspan="8"/>
+                            <field name="max_lead_time" colspan="2"/>
+                            <field name="priority" colspan="2"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <group name="name_group">
+                                    <field name="name"/>
+                                    <field name="max_lead_time"/>
+                                </group>
+                                <group name="tmpl_group">
+                                    <field name="product_tmpl_id" invisible="1"/>
+                                    <field name="priority"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="finish_line_ids" string="Finish Lines">
+                                    <tree editable="bottom">
+                                        <field name="finish_preset_id" invisible="1"/>
+                                        <field name="product_attribute_ids" invisible="1"/>
+                                        <field name="product_attribute_value_ids" invisible="1"/>
+                                        <field name="attribute_id" domain="[[&quot;id&quot;,&quot;in&quot;,product_attribute_ids]]"/>
+                                        <field name="attribute_value_id" domain="[&quot;&amp;&quot;,[&quot;attribute_id&quot;,&quot;=&quot;,attribute_id],[&quot;id&quot;,&quot;in&quot;,product_attribute_value_ids]]"/>
+                                    </tree>
+                                </field>
+                                <field name="exclusion_line_ids" string="Exclusion Lines">
+                                    <tree editable="bottom">
+                                        <field name="finish_preset_id" invisible="1"/>
+                                        <field name="product_attribute_ids" invisible="1"/>
+                                        <field name="product_attribute_value_ids" invisible="1"/>
+                                        <field name="attribute_id" domain="[[&quot;id&quot;,&quot;in&quot;,product_attribute_ids]]"/>
+                                        <field name="attribute_value_id" domain="[&quot;&amp;&quot;,[&quot;attribute_id&quot;,&quot;=&quot;,attribute_id],[&quot;id&quot;,&quot;in&quot;,product_attribute_value_ids]]"/>
+                                    </tree>
+                                </field>
+                                <field name="po_line_ids" string="Purchase Order Lines" colspan="4" modifiers="{}"/>
+                            </group>
+                        </form>
+                    </field>
+                </group>
+                <group>
+                    <field name="next_incoming_containers">
+                        <tree create="0">
+                            <field name="name"/>
+                            <field name="finish_preset_id"/>
+                            <field name="receipt_scheduled_date"/>
+                            <field name="initial_demand"/>
+                            <field name="ctr_reserved_qty"/>
+                            <field name="remaining_qty"/>       
+                            <field name="unreserved_move_ids" invisible="1"/>         
+                            <button name="toggle_cancel" type="object" string="Unreserved Moves" attrs="{'invisible': ['|',('unreserved_move_ids','=',False),('unreserved_move_ids','=',[])]}" class="btn text-warning" icon="fa-exclamation-triangle"/>
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

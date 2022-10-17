@@ -1,0 +1,137 @@
+<odoo>
+    <data noupdate="0">
+        <record id="get_next_available_date_on_edit" model="base.automation">
+            <field name="name">Get next available date on create SO line</field>
+            <field name="model_id" ref="sale.model_sale_order_line"/>
+            <field name="active">1</field>
+            <field name="trigger">on_write</field>
+            <field name="trigger_field_ids" eval="[(4,ref('sale.field_sale_order_line__product_id')),(4,ref('sale.field_sale_order_line__product_uom_qty')),(4,ref('sale.field_sale_order_line__product_no_variant_attribute_value_ids'))]"/>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.on_write_auto()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="get_next_available_date" model="base.automation">
+            <field name="name">Get next available date on create SO line</field>
+            <field name="model_id" ref="sale.model_sale_order_line"/>
+            <field name="active">1</field>
+            <field name="trigger">on_create</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.on_create_auto()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="update_ctr_lot" model="base.automation">
+            <field name="name">Update CTR Lot on create new stock.move.line</field>
+            <field name="model_id" ref="stock.model_stock_move_line"/>
+            <field name="active">1</field>
+            <field name="trigger">on_create</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.update_ctr_lot()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="update_ctr_lot_on_write" model="base.automation">
+            <field name="name">Update CTR Lot on modify stock.move.line</field>
+            <field name="model_id" ref="stock.model_stock_move_line"/>
+            <field name="active">1</field>
+            <field name="trigger">on_write</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.update_ctr_lot_on_write()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="delete_ctr_lot_on_unlink_receipt" model="base.automation">
+            <field name="name">Delete CTR Lot on unlink stock.picking</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="active">1</field>
+            <field name="trigger">on_unlink</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.delete_ctr_lots()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="cancel_ctr_lot_on_cancel_receipt" model="base.automation">
+            <field name="name">Cancel CTR Lot on cancel stock.picking</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="active">1</field>
+            <field name="trigger">on_write</field>
+            <field name="trigger_field_ids" eval="[(4,ref('stock.field_stock_picking__state'))]"/>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.cancel_ctr_lots()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="remove_ctr_link_on_move_after_reassignment" model="base.automation">
+            <field name="name">Remove CTR Link on Move after re-assignment</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="active">1</field>
+            <field name="trigger">on_write</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.remove_ctr_on_reassign()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="flag_stock_move_to_init" model="base.automation">
+            <field name="name">Flag stock.move as to init on create</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="active">1</field>
+            <field name="trigger">on_create</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.set_as_to_init()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="receive_ctr_lots" model="base.automation">
+            <field name="name">Receive CTR Lots</field>
+            <field name="model_id" ref="stock.model_stock_move_line"/>
+            <field name="active">1</field>
+            <field name="trigger">on_write</field>
+            <field name="filter_pre_domain">[('lot_id','=',False)]</field>
+            <field name="filter_domain">[('lot_id','!=',False)]</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.receive_ctr_lots()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="reserve_quant_on_create" model="base.automation">
+            <field name="name">Reserve quant on create</field>
+            <field name="model_id" ref="stock.model_stock_quant"/>
+            <field name="active">1</field>
+            <field name="trigger">on_create</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.update_reserved_qty()</field>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="modify_ctr_lots" model="base.automation">
+            <field name="name">Modify CTR Lots</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="active">1</field>
+            <field name="trigger">on_write</field>
+            <field name="state">code</field>
+            <field name="type">ir.actions.server</field>
+            <field name="code">action = record.update_ctr_lots()</field>
+        </record>
+    </data>
+</odoo>

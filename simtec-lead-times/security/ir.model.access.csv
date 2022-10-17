@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_finish_preset,finish_preset,model_finish_preset,base.group_user,1,1,1,1
+access_finish_preset_line,finish_preset_line,model_finish_preset_line,base.group_user,1,1,1,1
+access_finish_exclusion_line,finish_exclusion_line,model_finish_exclusion_line,base.group_user,1,1,1,1
+access_container_lot,container_lot,model_container_lot,base.group_user,1,1,1,1

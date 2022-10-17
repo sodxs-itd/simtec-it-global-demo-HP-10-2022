@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="website_product_page_customization" model="ir.ui.view">
+        <field name="name">website_product_page_customization</field>
+        <field name="inherit_id" ref="website_sale.product"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='add_to_cart_wrap']" position="after">
+                <div id="lead_times"></div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
